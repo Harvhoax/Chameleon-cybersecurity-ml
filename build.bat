@@ -1,6 +1,6 @@
 @echo off
 echo ========================================
-echo Chameleon Build Script
+echo Chameleon Integrated Build Script
 echo ========================================
 echo.
 
@@ -17,21 +17,26 @@ cd ..
 echo ✓ Frontend built successfully
 echo.
 
-echo [2/2] Backend Check...
+echo [2/2] Backend Integration...
 echo Backend is Python-based and runs from source
-echo No build step required
-echo ✓ Backend ready
+echo Backend will serve frontend from dist/ folder
+echo ✓ Backend ready to serve integrated app
 echo.
 
 echo ========================================
-echo Build Complete!
+echo Build Complete - INTEGRATED!
 echo ========================================
 echo.
-echo Frontend Output: frontend/dist/
-echo Backend Source: Backend/
+echo Frontend: frontend/dist/ (served by backend)
+echo Backend: Backend/ (serves frontend + API)
 echo.
-echo To deploy:
-echo 1. Deploy frontend/dist/ to your web server
-echo 2. Run backend with: cd Backend ^&^& uvicorn main:app --host 0.0.0.0 --port 8000
+echo To start integrated server:
+echo   npm run start:integrated     (development)
+echo   npm run start:production     (production)
+echo.
+echo Or manually:
+echo   cd Backend ^&^& uvicorn main:app --host 0.0.0.0 --port 8000
+echo.
+echo Access everything at: http://localhost:8000
 echo.
 pause

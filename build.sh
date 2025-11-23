@@ -4,10 +4,11 @@
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 RED='\033[0;31m'
+YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 echo "========================================"
-echo "Chameleon Build Script"
+echo "Chameleon Integrated Build Script"
 echo "========================================"
 echo
 
@@ -23,20 +24,25 @@ cd ..
 echo -e "${GREEN}✓ Frontend built successfully${NC}"
 echo
 
-echo -e "${BLUE}[2/2] Backend Check...${NC}"
+echo -e "${BLUE}[2/2] Backend Integration...${NC}"
 echo "Backend is Python-based and runs from source"
-echo "No build step required"
-echo -e "${GREEN}✓ Backend ready${NC}"
+echo "Backend will serve frontend from dist/ folder"
+echo -e "${GREEN}✓ Backend ready to serve integrated app${NC}"
 echo
 
 echo "========================================"
-echo "Build Complete!"
+echo "Build Complete - INTEGRATED!"
 echo "========================================"
 echo
-echo "Frontend Output: frontend/dist/"
-echo "Backend Source: Backend/"
+echo "Frontend: frontend/dist/ (served by backend)"
+echo "Backend: Backend/ (serves frontend + API)"
 echo
-echo "To deploy:"
-echo "1. Deploy frontend/dist/ to your web server"
-echo "2. Run backend with: cd Backend && uvicorn main:app --host 0.0.0.0 --port 8000"
+echo -e "${YELLOW}To start integrated server:${NC}"
+echo "  npm run start:integrated     (development)"
+echo "  npm run start:production     (production)"
+echo
+echo "Or manually:"
+echo "  cd Backend && uvicorn main:app --host 0.0.0.0 --port 8000"
+echo
+echo -e "${GREEN}Access everything at: http://localhost:8000${NC}"
 echo

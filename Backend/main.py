@@ -580,6 +580,47 @@ async def health_check():
 
 
 # ============================================================================
+# FRONTEND INTEGRATION - Serve React App from dist folder
+# ============================================================================
+
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+import os
+
+# Path to frontend dist folder
+frontend_dist = os.path.join(os.path.dirname(__file__), "..", "frontend", "dist")
+
+if os.path.exists(frontend_dist):
+    print(f"✅ Frontend dist folder found at: {frontend_dist}")
+    
+    # Mount static assets (JS, CSS, images, etc.)
+    app.mount("/assets", StaticFiles(directory=os.path.join(frontend_dist, "assets")), name="assets")
+    
+    # Serve vite.svg and other root static files
+    @app.get("/vite.svg")
+    async def serve_vite_svg():
+        return FileResponse(os.path.join(frontend_dist, "vite.svg"))
+    
+    # Catch-all route for SPA (must be last)
+    @app.get("/{full_path:path}")
+    async def serve_frontend(full_path: str):
+        # Don't interfere with API routes
+        if full_path.startswith("api/"):
+            raise HTTPException(status_code=404, detail="API endpoint not found")
+        
+        # Check if specific file exists
+        file_path = os.path.join(frontend_dist, full_path)
+        if os.path.exists(file_path) and os.path.isfile(file_path):
+            return FileResponse(file_path)
+        
+        # Otherwise serve index.html for SPA routing
+        return FileResponse(os.path.join(frontend_dist, "index.html"))
+else:
+    print(f"⚠️  Frontend dist folder not found at: {frontend_dist}")
+    print("   Run 'npm run build' to build the frontend first.")
+
+
+# ============================================================================
 # PRIVACY-PRESERVING THREAT INTELLIGENCE ENDPOINTS
 # ============================================================================
 

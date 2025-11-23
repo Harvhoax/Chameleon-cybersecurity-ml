@@ -4,9 +4,11 @@
   "description": "Chameleon Adaptive Deception System - Advanced Cybersecurity Honeypot",
   "scripts": {
     "start": "concurrently \"cd Backend && uvicorn main:app --reload\" \"cd frontend && npm run dev\"",
+    "start:integrated": "npm run build:frontend && cd Backend && uvicorn main:app --reload",
+    "start:production": "npm run build:frontend && cd Backend && uvicorn main:app --host 0.0.0.0 --port 8000",
     "start:backend": "cd Backend && uvicorn main:app --reload",
     "start:frontend": "cd frontend && npm run dev",
-    "build": "npm run build:frontend && echo Backend ready (Python runs from source)",
+    "build": "npm run build:frontend && echo ✅ Frontend built and integrated with backend",
     "build:frontend": "cd frontend && npm run build",
     "build:backend": "echo Backend is Python-based and runs from source - no build needed",
     "install:all": "cd Backend && pip install -r requirements.txt && cd ../frontend && npm install",
