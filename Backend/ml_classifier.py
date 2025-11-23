@@ -1,9 +1,20 @@
-import tensorflow as tf
 import numpy as np
 import re
 from config import settings, MODEL_PATH
 from models import AttackType, ClassificationResult
 import os
+
+# Try to import TensorFlow, but don't fail if it's not available
+try:
+    import tensorflow as tf
+    from tensorflow import keras
+    TF_AVAILABLE = True
+except Exception as tf_error:
+    print(f"Warning: TensorFlow not available: {tf_error}")
+    print("Using heuristic-based classification only")
+    TF_AVAILABLE = False
+    tf = None
+    keras = None
 
 class MLClassifier:
     def __init__(self):
@@ -16,26 +27,29 @@ class MLClassifier:
             3: AttackType.SSI
         }
         
-        try:
-            if os.path.exists(MODEL_PATH):
-                # Register custom objects before loading
-                custom_objects = {
-                    'custom_standardization': lambda x: x,  # Placeholder
-                    'char_split': lambda x: x  # Placeholder
-                }
-                self.model = tf.keras.models.load_model(
-                    MODEL_PATH,
-                    custom_objects=custom_objects,
-                    compile=False  # Skip compilation to avoid issues
-                )
-                print(f"✅ Loaded ML model from {MODEL_PATH}")
-            else:
-                print(f"⚠️  Model file not found at {MODEL_PATH}")
-                print(f"⚠️  Using heuristic-based classification only")
-        except Exception as e:
-            print(f"⚠️  Error loading ML model: {e}")
-            print(f"⚠️  Falling back to heuristic-based classification")
-            self.model = None
+        # Only try to load model if TensorFlow is available
+        if TF_AVAILABLE:
+            try:
+                if os.path.exists(MODEL_PATH):
+                    # Register custom objects before loading
+                    custom_objects = {
+                        'custom_standardization': lambda x: x,  # Placeholder
+                        'char_split': lambda x: x  # Placeholder
+                    }
+                    self.model = keras.models.load_model(
+                        MODEL_PATH,
+                        custom_objects=custom_objects,
+                        compile=False  # Skip compilation to avoid issues
+                    )
+                    print("ML model loaded successfully")
+                else:
+                    print("Model file not found - using heuristic classification")
+            except Exception as e:
+                print(f"Error loading ML model: {str(e)}")
+                print("Falling back to heuristic-based classification")
+                self.model = None
+        else:
+            print("TensorFlow not available - using heuristic classification only")
             
         self.build_char_mapping()
 

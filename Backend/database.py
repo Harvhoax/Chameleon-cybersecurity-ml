@@ -34,14 +34,14 @@ async def connect_to_mongo():
         await database.attack_logs.create_index([("classification.attack_type", pymongo.ASCENDING)])
         
         db.connected = True
-        print("✅ Connected to MongoDB successfully")
+        print("[OK] Connected to MongoDB successfully")
         logger.info("Connected to MongoDB")
         
     except Exception as e:
         db.connected = False
-        print(f"⚠️  WARNING: Could not connect to MongoDB: {e}")
-        print("⚠️  The application will run in LIMITED MODE without database persistence")
-        print("⚠️  To fix: Install MongoDB or use MongoDB Atlas")
+        print(f"[WARNING] Could not connect to MongoDB: {e}")
+        print("[WARNING] The application will run in LIMITED MODE without database persistence")
+        print("[WARNING] To fix: Install MongoDB or use MongoDB Atlas")
         print("   - Local: https://www.mongodb.com/try/download/community")
         print("   - Cloud: https://www.mongodb.com/cloud/atlas (FREE)")
         logger.warning(f"MongoDB connection failed: {e}")

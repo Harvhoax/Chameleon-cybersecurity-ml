@@ -189,7 +189,7 @@ async def submit_trap(user_input: UserInput, request: Request, background_tasks:
             classification.confidence
         )
         if threat_report:
-            print(f"🔔 Novel attack detected! Created threat intelligence report: {threat_report['pattern_hash'][:16]}...")
+            print(f"[ALERT] Novel attack detected! Created threat intelligence report: {threat_report['pattern_hash'][:16]}...")
     
     # Background logging
     background_tasks.add_task(log_attack, log_dict)
@@ -205,7 +205,7 @@ async def submit_trap(user_input: UserInput, request: Request, background_tasks:
                 confidence=classification.confidence,
                 timestamp=log_entry.timestamp
             )
-            print(f"🔒 Generated privacy-preserving threat intel report: {threat_report['id']}")
+            print(f"[SECURE] Generated privacy-preserving threat intel report: {threat_report['id']}")
     
     # Return response with appropriate status code
     from fastapi.responses import JSONResponse
@@ -591,7 +591,7 @@ import os
 frontend_dist = os.path.join(os.path.dirname(__file__), "..", "frontend", "dist")
 
 if os.path.exists(frontend_dist):
-    print(f"✅ Frontend dist folder found at: {frontend_dist}")
+    print(f"[OK] Frontend dist folder found at: {frontend_dist}")
     
     # Mount static assets (JS, CSS, images, etc.)
     app.mount("/assets", StaticFiles(directory=os.path.join(frontend_dist, "assets")), name="assets")
@@ -616,7 +616,7 @@ if os.path.exists(frontend_dist):
         # Otherwise serve index.html for SPA routing
         return FileResponse(os.path.join(frontend_dist, "index.html"))
 else:
-    print(f"⚠️  Frontend dist folder not found at: {frontend_dist}")
+    print(f"[WARNING] Frontend dist folder not found at: {frontend_dist}")
     print("   Run 'npm run build' to build the frontend first.")
 
 
