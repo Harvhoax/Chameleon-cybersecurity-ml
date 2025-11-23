@@ -1,6 +1,19 @@
-import { format } from 'date-fns';
+import { format, formatDistanceToNow } from 'date-fns';
 
 export const formatTimestamp = (timestamp) => {
+    if (!timestamp) return 'N/A';
+    try {
+        const date = new Date(timestamp);
+        const formatted = format(date, 'PPpp');
+        const relative = formatDistanceToNow(date, { addSuffix: true });
+        return `${formatted} (${relative})`;
+    } catch (error) {
+        console.error('Error formatting date:', error);
+        return timestamp;
+    }
+};
+
+export const formatTimestampShort = (timestamp) => {
     if (!timestamp) return 'N/A';
     try {
         return format(new Date(timestamp), 'PPpp');
