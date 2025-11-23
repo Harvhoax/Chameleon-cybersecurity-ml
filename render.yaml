@@ -1,0 +1,23 @@
+services:
+  # Backend service (serves frontend + API)
+  - type: web
+    name: chameleon-backend
+    env: python
+    region: oregon
+    plan: free
+    branch: main
+    buildCommand: npm run deploy:build
+    startCommand: cd Backend && uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: NODE_VERSION
+        value: 22.16.0
+      - key: MONGODB_URL
+        sync: false
+      - key: DATABASE_NAME
+        value: chameleon_db
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: PORT
+        value: 8000
